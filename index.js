@@ -99,8 +99,19 @@ const port = process.env.PORT || 9090;
   conn.ev.on('connection.update', (update) => {
   const { connection, lastDisconnect } = update
   if (connection === 'close') {
-  if (lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut) {
-  connectToWA()
+  const statusCode = lastDisconnect && lastDisconnect.error && lastDisconnect.error.output ? lastDisconnect.error.output.statusCode : null;
+  const reason = lastDisconnect && lastDisconnect.error ? lastDisconnect.error.message : 'Unknown reason';
+  console.log('');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  ❌  WHATSAPP DISCONNECTED');
+  console.log('  📛  Code   : ' + statusCode);
+  console.log('  📝  Reason : ' + reason);
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  if (statusCode === DisconnectReason.loggedOut) {
+    console.log('  🔴  Bot is LOGGED OUT - please update SESSION_ID env var');
+  } else {
+    console.log('  🔄  Reconnecting to WhatsApp...');
+    connectToWA();
   }
   } else if (connection === 'open') {
   console.log('🧬 Installing Plugins')
