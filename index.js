@@ -53,11 +53,9 @@ const {
   
   const clearTempDir = () => {
       fs.readdir(tempDir, (err, files) => {
-          if (err) throw err;
+          if (err) return;
           for (const file of files) {
-              fs.unlink(path.join(tempDir, file), err => {
-                  if (err) throw err;
-              });
+              fs.unlink(path.join(tempDir, file), () => {});
           }
       });
   }
@@ -82,7 +80,20 @@ const port = process.env.PORT || 9090;
   
   //=============================================
   
-  async function connectToWA() {
+  process.on('uncaughtException', (err) => {
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  💥  UNCAUGHT EXCEPTION: ' + err.message);
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log(err.stack);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  💥  UNHANDLED REJECTION: ' + (reason && reason.message ? reason.message : String(reason)));
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+});
+
+async function connectToWA() {
   console.log("Connecting to WhatsApp ⏳️...");
   const { state, saveCreds } = await useMultiFileAuthState(__dirname + '/sessions/')
   var { version } = await fetchLatestBaileysVersion()
@@ -91,7 +102,10 @@ const port = process.env.PORT || 9090;
           logger: P({ level: 'silent' }),
           printQRInTerminal: false,
           browser: Browsers.macOS("Firefox"),
-          syncFullHistory: true,
+          syncFullHistory: false,
+          connectTimeoutMs: 30000,
+          keepAliveIntervalMs: 10000,
+          retryRequestDelayMs: 250,
           auth: state,
           version
           })
@@ -907,6 +921,4 @@ ${userHistory}
   res.send("VORTEX-XMD STARTED ✅");
   });
   app.listen(port, () => console.log(`Server listening on port http://localhost:${port}`));
-  setTimeout(() => {
-  connectToWA()
-  }, 4000);
+  connectToWA();
