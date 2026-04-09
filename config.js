@@ -23,7 +23,7 @@ module.exports = {
     // ==============================
     ANTI_CALL: process.env.ANTI_CALL || "false", // "true" = Warn only, no block
     ANTI_CALL_BLOCK: process.env.ANTI_CALL_BLOCK || "true", // "true" = 5 warnings then block
-    AUTO_BLOCK: process.envAUTO_BLOCK || "false",
+    AUTO_BLOCK: process.env.AUTO_BLOCK || "false",
     // ==============================
     //            MODE
     // ==============================
