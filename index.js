@@ -111,7 +111,19 @@ const port = process.env.PORT || 9090;
   }
   });
   console.log('Plugins installed successful ✅')
-  console.log('Bot connected to whatsapp ✅')
+  const botNumber = conn.user.id.split(':')[0] + '@s.whatsapp.net';
+  const connTime = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Dar_es_Salaam' });
+  console.log('');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  ✅  VORTEX-XMD CONNECTED TO WHATSAPP  ✅  ');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  📱  Bot Number : +' + botNumber.replace('@s.whatsapp.net',''));
+  console.log('  🕐  Time       : ' + connTime);
+  console.log('  🌐  WA Version : ' + version.join('.'));
+  console.log('  👑  Owner      : HansTz');
+  console.log('  🔰  Prefix     : ' + prefix);
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('');
   
   let up = `
  ━━━━━━━━━━━━━━━━⬣
